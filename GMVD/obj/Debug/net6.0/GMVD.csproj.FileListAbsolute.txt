@@ -1,0 +1,15 @@
+C:\Users\ponta\source\repos\GMVD\GMVD\bin\Debug\net6.0\GMVD.exe
+C:\Users\ponta\source\repos\GMVD\GMVD\bin\Debug\net6.0\GMVD.deps.json
+C:\Users\ponta\source\repos\GMVD\GMVD\bin\Debug\net6.0\GMVD.runtimeconfig.json
+C:\Users\ponta\source\repos\GMVD\GMVD\bin\Debug\net6.0\GMVD.dll
+C:\Users\ponta\source\repos\GMVD\GMVD\bin\Debug\net6.0\GMVD.pdb
+C:\Users\ponta\source\repos\GMVD\GMVD\obj\Debug\net6.0\GMVD.csproj.AssemblyReference.cache
+C:\Users\ponta\source\repos\GMVD\GMVD\obj\Debug\net6.0\GMVD.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ponta\source\repos\GMVD\GMVD\obj\Debug\net6.0\GMVD.AssemblyInfoInputs.cache
+C:\Users\ponta\source\repos\GMVD\GMVD\obj\Debug\net6.0\GMVD.AssemblyInfo.cs
+C:\Users\ponta\source\repos\GMVD\GMVD\obj\Debug\net6.0\GMVD.csproj.CoreCompileInputs.cache
+C:\Users\ponta\source\repos\GMVD\GMVD\obj\Debug\net6.0\GMVD.dll
+C:\Users\ponta\source\repos\GMVD\GMVD\obj\Debug\net6.0\refint\GMVD.dll
+C:\Users\ponta\source\repos\GMVD\GMVD\obj\Debug\net6.0\GMVD.pdb
+C:\Users\ponta\source\repos\GMVD\GMVD\obj\Debug\net6.0\GMVD.genruntimeconfig.cache
+C:\Users\ponta\source\repos\GMVD\GMVD\obj\Debug\net6.0\ref\GMVD.dll

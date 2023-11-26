@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMVD", "GMVD\GMVD.csproj", "{EDA8CDE3-CC85-4B6C-AEC6-B745CABBB11F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDA8CDE3-CC85-4B6C-AEC6-B745CABBB11F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDA8CDE3-CC85-4B6C-AEC6-B745CABBB11F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDA8CDE3-CC85-4B6C-AEC6-B745CABBB11F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDA8CDE3-CC85-4B6C-AEC6-B745CABBB11F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68D4CC9D-C20A-4062-8A1C-39BC5AFBD415}
+	EndGlobalSection
+EndGlobal
