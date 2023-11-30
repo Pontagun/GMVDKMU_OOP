@@ -8,19 +8,19 @@
     "net6.0": []
   },
   "packageFolders": {
-    "C:\\Users\\ponta\\.nuget\\packages\\": {}
+    "C:\\Users\\psonc001\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ponta\\source\\repos\\GMVD\\GMVD\\GMVD.csproj",
+      "projectUniqueName": "C:\\Users\\psonc001\\Source\\Repos\\Pontagun\\GMVDKMU_OOP\\GMVD\\GMVD.csproj",
       "projectName": "GMVD",
-      "projectPath": "C:\\Users\\ponta\\source\\repos\\GMVD\\GMVD\\GMVD.csproj",
-      "packagesPath": "C:\\Users\\ponta\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ponta\\source\\repos\\GMVD\\GMVD\\obj\\",
+      "projectPath": "C:\\Users\\psonc001\\Source\\Repos\\Pontagun\\GMVDKMU_OOP\\GMVD\\GMVD.csproj",
+      "packagesPath": "C:\\Users\\psonc001\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\psonc001\\Source\\Repos\\Pontagun\\GMVDKMU_OOP\\GMVD\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ponta\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\psonc001\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -61,7 +61,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }
