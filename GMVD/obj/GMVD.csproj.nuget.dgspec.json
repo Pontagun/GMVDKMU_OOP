@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\psonc001\\source\\repos\\Pontagun\\GMVDKMU_OOP\\GMVD\\GMVD.csproj": {}
+    "C:\\Users\\ponta\\source\\repos\\GMVD\\GMVD\\GMVD.csproj": {}
   },
   "projects": {
-    "C:\\Users\\psonc001\\source\\repos\\Pontagun\\GMVDKMU_OOP\\GMVD\\GMVD.csproj": {
+    "C:\\Users\\ponta\\source\\repos\\GMVD\\GMVD\\GMVD.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\psonc001\\source\\repos\\Pontagun\\GMVDKMU_OOP\\GMVD\\GMVD.csproj",
+        "projectUniqueName": "C:\\Users\\ponta\\source\\repos\\GMVD\\GMVD\\GMVD.csproj",
         "projectName": "GMVD",
-        "projectPath": "C:\\Users\\psonc001\\source\\repos\\Pontagun\\GMVDKMU_OOP\\GMVD\\GMVD.csproj",
-        "packagesPath": "C:\\Users\\psonc001\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\psonc001\\source\\repos\\Pontagun\\GMVDKMU_OOP\\GMVD\\obj\\",
+        "projectPath": "C:\\Users\\ponta\\source\\repos\\GMVD\\GMVD\\GMVD.csproj",
+        "packagesPath": "C:\\Users\\ponta\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ponta\\source\\repos\\GMVD\\GMVD\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\psonc001\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ponta\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -55,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

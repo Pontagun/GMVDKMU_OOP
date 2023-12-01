@@ -87,7 +87,7 @@ namespace GMVD
             string docPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             List<string> line = new List<string>();
 
-            float alphaMTNLNS = 1.0f;
+            float alphaMTNLNS = 0.0f;
             using (StreamReader sr = new StreamReader("rec010GMV1.txt"))
             {
                 try
@@ -252,7 +252,7 @@ namespace GMVD
                         //qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, thisMuY)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
                         qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, KM)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
                         //line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W);
-                        line.Add(smoothenStillnessGyro + ", " + stillnessGyro + ", " + alpha0);
+                        line.Add(smoothenStillnessGyro + ", " + alpha0 + ", " + alphaMTNLNS);
                     }
                 }
                 catch (Exception e)
@@ -317,7 +317,7 @@ namespace GMVD
 
             float alphaPrime = (Malpha * alphaG) + (1 - Malpha);
 
-            float alpha = (alphaPrime + (Math.Abs(alphaPrime) / 2));
+            float alpha = (alphaPrime + (Math.Abs(alphaPrime))) / 2;
 
             return alpha;
         }
