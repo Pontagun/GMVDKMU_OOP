@@ -58,7 +58,7 @@ namespace GMVD
         static List<string> line = new List<string>();
         static void Main(string[] args)
         {
-            float KM = 1.0f;
+            float muK = 1.0f;
             Vector3 bias = new Vector3(0.0f);
             Vector3 biasBuffer = new Vector3(0.0f);
             Vector3 unbiasedGyro = new Vector3(0.0f);
@@ -233,8 +233,8 @@ namespace GMVD
                         alpha0List.Insert(0, alpha0);
 
                         /////// This is how to calculate mu in GMVD, uncomment line ~258 to use the OG algorithm.
-                        thisMuY = (muWeight * thisMuX) + (1.0f - muWeight) * thisMuY;
-                        thisMuX = Convert.ToSingle(Math.Pow(Vector3Helper.GetMuPara(magnetAvg, qGA0, M_int0), 2));
+                        //thisMuY = (muWeight * thisMuX) + (1.0f - muWeight) * thisMuY;
+                        //thisMuX = Convert.ToSingle(Math.Pow(Vector3Helper.GetMuPara(magnetAvg, qGA0, M_int0), 2));
                         /////////////////////////////////////////////////////////////////////////////////////////
 
                         accelInert = Vector3Helper.qrotbak(qOut, accelAvg);
@@ -249,12 +249,15 @@ namespace GMVD
                         kmmergeList.Insert(0, kmmerge);
 
 
-                        KM = GetKMU(kmmergeList.Take(WIN_SIZE).Average()
+                        muK = GetKMU(kmmergeList.Take(WIN_SIZE).Average()
                             , alpha0List.Take(WIN_SIZE).Average());
 
-                        //qOut = Quaternion.Slerp(qG0, qGA0, alpha0);
+                        //--- GMV
+                        //qOut = Quaternion.Slerp(qG0, qGA0, alpha0); 
+                        //--- GMVD
                         //qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, thisMuY)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
-                        qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, KM)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
+                        //--- GMVD with MuK
+                        qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, muK)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
                         line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W + ", " + alpha0);
                         //line.Add(stillnessGyro + ", " + stillnessAccel + ", " + alphaMTNLNS + ", " + alpha0);
                     }
