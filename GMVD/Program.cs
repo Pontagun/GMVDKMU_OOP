@@ -53,6 +53,9 @@ namespace GMVD
         private static List<Vector3> mag30List = new List<Vector3>();
         private static List<float> alpha0List = new List<float>();
         private static List<float> kmmergeList = new List<float>();
+
+
+        static List<string> line = new List<string>();
         static void Main(string[] args)
         {
             float KM = 1.0f;
@@ -85,9 +88,12 @@ namespace GMVD
             float samplingInterval = 0;
 
             string docPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            List<string> line = new List<string>();
-
+            float stillnessGyro = 1f; // Gyro𝑀𝑇𝑁𝐿𝑁𝑆
+            float stillnessAccel = 1f; // Accel𝑀𝑇𝑁𝐿𝑁𝑆
             float alphaMTNLNS = 0.0f;
+            float alpha0 = 1.0f;
+            float thisMuX = 1.0f;
+            float thisMuY = 1.0f;
             using (StreamReader sr = new StreamReader("rec010GMV1.txt"))
             {
                 try
@@ -108,15 +114,18 @@ namespace GMVD
                         accelAvgList.Insert(0, accelAvg);
                         magnetAvgList.Insert(0, magnetAvg);
 
-                        float stillnessGyro = GetStillnessSensor(gyroAvgList); // Gyro𝑀𝑇𝑁𝐿𝑁𝑆
-                        float stillnessAccel = GetStillnessSensor(accelAvgList); // Accel𝑀𝑇𝑁𝐿𝑁𝑆
+                        // Correction checked.
+                        stillnessGyro = GetSensorDiff(gyroAvgList); // Gyro𝑀𝑇𝑁𝐿𝑁𝑆
+                        stillnessAccel = GetSensorDiff(accelAvgList); // Accel𝑀𝑇𝑁𝐿𝑁𝑆
 
-                        float smoothenStillnessGyro = GetGammaFilter(stillnessGyro, alphaMTNLNS);
-                        float smoothenStillnessAccel = GetGammaFilter(stillnessAccel, alphaMTNLNS);
+                        float smoothenStillnessGyro = GetGammaFilter(Convert.ToSingle(Math.Pow(stillnessGyro, 2)), alphaMTNLNS);
+                        float smoothenStillnessAccel = GetGammaFilter(Convert.ToSingle(Math.Pow(stillnessAccel, 2)), alphaMTNLNS);
+                        //line.Add(Math.Pow(stillnessGyro, 2) + ", " + smoothenStillnessGyro + ", " + Math.Pow(stillnessAccel, 2) + ", " 
+                        //    + smoothenStillnessAccel + ", " + alphaMTNLNS + ", " + alpha0);
 
-
-                        alphaMTNLNS = smoothenStillnessGyro * smoothenStillnessAccel;
-
+                        float gyroMTNLNS = GetLinearEquation(smoothenStillnessGyro, 2f);
+                        float accelMTNLNS = GetLinearEquation(smoothenStillnessAccel, 2f);
+                        alphaMTNLNS = (gyroMTNLNS * gyroMTNLNS);
 
 
                         stillnessAvg /= 3; // For some reasons, file recorded stillness ~3.
@@ -217,21 +226,16 @@ namespace GMVD
                         dqGM0 = QuaternionHelper.GetMagAngleDiff(magnetAvg, m30);
                         qGM0 = Quaternion.Normalize(qG0 * dqGM0);
 
+                        thisAlphaY0 = alpWeight * (thisAlphaX0) + (1.0f - alpWeight) * (thisAlphaY0);
                         thisAlphaX0 = Convert.ToSingle(Math.Pow(stillnessAvg, 2.0f));
-                        thisAlphaY0 = alpWeight * (prevAlphaX0) + (1.0f - alpWeight) * (prevAlphaY0);
-                        prevAlphaX0 = thisAlphaX0;
-                        prevAlphaY0 = thisAlphaY0;
-                        float alpha0 = Vector3Helper.GetAlphaPara(thisAlphaY0);
+                        alpha0 = Vector3Helper.GetAlphaPara(thisAlphaY0);
 
                         alpha0List.Insert(0, alpha0);
 
                         /////// This is how to calculate mu in GMVD, uncomment line ~258 to use the OG algorithm.
-                        float thisMu = Vector3Helper.GetMuPara(magnetAvg, qGA0, M_int0);
-                        float thisMuX = thisMu * thisMu;
-                        float thisMuY = (muWeight * prevMuX) + (1.0f - muWeight) * prevMuY;
-                        prevMuX = thisMuX;
-                        prevMuY = thisMuY;
-                        ////////////////
+                        thisMuY = (muWeight * thisMuX) + (1.0f - muWeight) * thisMuY;
+                        thisMuX = Convert.ToSingle(Math.Pow(Vector3Helper.GetMuPara(magnetAvg, qGA0, M_int0), 2));
+                        /////////////////////////////////////////////////////////////////////////////////////////
 
                         accelInert = Vector3Helper.qrotbak(qOut, accelAvg);
                         magnetInert = Vector3Helper.qrotbak(qOut, magnetAvg);
@@ -251,8 +255,8 @@ namespace GMVD
                         //qOut = Quaternion.Slerp(qG0, qGA0, alpha0);
                         //qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, thisMuY)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
                         qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, KM)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
-                        //line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W);
-                        line.Add(smoothenStillnessGyro + ", " + alpha0 + ", " + alphaMTNLNS);
+                        line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W + ", " + alpha0);
+                        //line.Add(stillnessGyro + ", " + stillnessAccel + ", " + alphaMTNLNS + ", " + alpha0);
                     }
                 }
                 catch (Exception e)
@@ -262,7 +266,7 @@ namespace GMVD
                 finally
                 {
                     sr.Close();
-                    File.AppendAllLines(Path.Combine(docPath, "WriteFileS.csv"), line);
+                    File.AppendAllLines(Path.Combine(docPath, DateTime.Now.ToFileTime() + ".csv"), line);
                 }
             }
         }
@@ -276,16 +280,16 @@ namespace GMVD
             return tempkm * alphamin2;
         }
 
-        public static float GetStillnessSensor(List<Vector3> sensorDatas) {
+        public static float GetSensorDiff(List<Vector3> sensorDatas) {
 
             Vector3 deltaVector;
             float deltaVectorAxisMax = 0.0f;
-            const float TMTNLNS = 0.5f;
+            const float thMTNLNS = 0.5f;
             float valTMTNLNS = 0;
 
-            if (sensorDatas.Count > 1)
+            if (sensorDatas.Count > 5)
             {
-                deltaVector = sensorDatas[1] - sensorDatas[0];
+                deltaVector = sensorDatas[5] - sensorDatas[0];
             }
             else {
                 deltaVector = sensorDatas[0];
@@ -293,14 +297,16 @@ namespace GMVD
 
             deltaVectorAxisMax = Math.Max(Math.Abs(deltaVector.X), Math.Max(Math.Abs(deltaVector.Y), Math.Abs(deltaVector.Z)));
 
-            if (deltaVectorAxisMax <= TMTNLNS)
+            if (deltaVectorAxisMax <= thMTNLNS)
             {
-                valTMTNLNS = 1 - (deltaVectorAxisMax / TMTNLNS);
+                valTMTNLNS = 1 - (deltaVectorAxisMax / thMTNLNS);
             }
             else
             {
                 valTMTNLNS = 0;
             }
+
+            // Checked True line.Add(deltaVector.X + ", " + deltaVector.Y + ", " + deltaVector.Z + ", " + deltaVectorAxisMax + ", " + valTMTNLNS);
 
             return valTMTNLNS;
         }
@@ -310,16 +316,20 @@ namespace GMVD
             // These variables use name as Nann's paper at HCII2022.
 
             float alphaG = -10.0f;
-            float Walpha = 0.25f;
-            float Malpha = 0.25f;
+            float Walpha = .5f;
 
             alphaG = (Walpha * stillnessSensor) + (1 - Walpha) * (oldAlpha);
 
-            float alphaPrime = (Malpha * alphaG) + (1 - Malpha);
+            return alphaG;
+        }
 
+        public static float GetLinearEquation(float value, float slope) {
+
+            float alphaPrime = (slope * value) + (1);
             float alpha = (alphaPrime + (Math.Abs(alphaPrime))) / 2;
 
-            return alpha;
+            return value;
         }
+
     }
 }
