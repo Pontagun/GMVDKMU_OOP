@@ -232,11 +232,6 @@ namespace GMVD
 
                         alpha0List.Insert(0, alpha0);
 
-                        /////// This is how to calculate mu in GMVD, uncomment line ~258 to use the OG algorithm.
-                        //thisMuY = (muWeight * thisMuX) + (1.0f - muWeight) * thisMuY;
-                        //thisMuX = Convert.ToSingle(Math.Pow(Vector3Helper.GetMuPara(magnetAvg, qGA0, M_int0), 2));
-                        /////////////////////////////////////////////////////////////////////////////////////////
-
                         accelInert = Vector3Helper.qrotbak(qOut, accelAvg);
                         magnetInert = Vector3Helper.qrotbak(qOut, magnetAvg);
 
@@ -248,14 +243,18 @@ namespace GMVD
                         float kmmerge = (kmuang + kmmag) / 2; // mean([kmuang(i) kmmag(i)]);
                         kmmergeList.Insert(0, kmmerge);
 
-
                         muK = GetKMU(kmmergeList.Take(WIN_SIZE).Average()
                             , alpha0List.Take(WIN_SIZE).Average());
 
                         //--- GMV
                         //qOut = Quaternion.Slerp(qG0, qGA0, alpha0); 
+
                         //--- GMVD
+                        //    This is how to calculate mu in GMVD.
+                        //thisMuY = (muWeight * thisMuX) + (1.0f - muWeight) * thisMuY;
+                        //thisMuX = Convert.ToSingle(Math.Pow(Vector3Helper.GetMuPara(magnetAvg, qGA0, M_int0), 2));
                         //qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, thisMuY)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
+                        
                         //--- GMVD with MuK
                         qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, muK)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
                         line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W + ", " + alpha0);
@@ -317,7 +316,6 @@ namespace GMVD
         public static float GetGammaFilter(float stillnessSensor, float oldAlpha) {
 
             // These variables use name as Nann's paper at HCII2022.
-
             float alphaG = -10.0f;
             float Walpha = .5f;
 
@@ -333,6 +331,5 @@ namespace GMVD
 
             return value;
         }
-
     }
 }
