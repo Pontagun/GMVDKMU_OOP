@@ -18,7 +18,6 @@ namespace GMVD
         public const float alpWeight = 0.25f;
         public const float muWeight = 0.25f;
         public const int WIN_SIZE = 8;
-        public const int WIN_SIZ_ALPHA_ACCEL = 5;
 
         // These are realtime reading associate to GMVD.
         public static Vector3 gyro0;
@@ -95,7 +94,6 @@ namespace GMVD
             float alpha0 = 1.0f;
             float thisMuX = 1.0f;
             float thisMuY = 1.0f;
-            float smoothenStillnessAccel = 0;
             using (StreamReader sr = new StreamReader("rec010GMV1.txt"))
             {
                 try
@@ -117,10 +115,17 @@ namespace GMVD
                         magnetAvgList.Insert(0, magnetAvg);
 
                         // Correction checked.
+                        stillnessGyro = GetSensorDiff(gyroAvgList); // Gyro𝑀𝑇𝑁𝐿𝑁𝑆
                         stillnessAccel = GetSensorDiff(accelAvgList); // Accel𝑀𝑇𝑁𝐿𝑁𝑆
 
-                        smoothenStillnessAccel = GetGammaFilter(Convert.ToSingle(Math.Pow(stillnessAccel, 2)), alphaMTNLNS);
+                        float smoothenStillnessGyro = GetGammaFilter(Convert.ToSingle(Math.Pow(stillnessGyro, 2)), alphaMTNLNS);
+                        float smoothenStillnessAccel = GetGammaFilter(Convert.ToSingle(Math.Pow(stillnessAccel, 2)), alphaMTNLNS);
+                        //line.Add(Math.Pow(stillnessGyro, 2) + ", " + smoothenStillnessGyro + ", " + Math.Pow(stillnessAccel, 2) + ", " 
+                        //    + smoothenStillnessAccel + ", " + alphaMTNLNS + ", " + alpha0);
 
+                        //float gyroMTNLNS = GetLinearEquation(smoothenStillnessGyro, 2f);
+                        //float accelMTNLNS = GetLinearEquation(smoothenStillnessAccel, 2f);
+                        //alphaMTNLNS = (gyroMTNLNS * gyroMTNLNS);
                         alphaMTNLNS = smoothenStillnessAccel;
 
                         stillnessAvg /= 3; // For some reasons, file recorded stillness ~3.
@@ -284,9 +289,9 @@ namespace GMVD
             const float thMTNLNS = 0.5f;
             float valTMTNLNS = 0;
 
-            if (sensorDatas.Count > WIN_SIZ_ALPHA_ACCEL)
+            if (sensorDatas.Count > 5)
             {
-                deltaVector = sensorDatas[WIN_SIZ_ALPHA_ACCEL-1] - sensorDatas[0];
+                deltaVector = sensorDatas[5] - sensorDatas[0];
             }
             else {
                 deltaVector = sensorDatas[0];
