@@ -123,10 +123,10 @@ namespace GMVD
                         //line.Add(Math.Pow(stillnessGyro, 2) + ", " + smoothenStillnessGyro + ", " + Math.Pow(stillnessAccel, 2) + ", " 
                         //    + smoothenStillnessAccel + ", " + alphaMTNLNS + ", " + alpha0);
 
-                        float gyroMTNLNS = GetLinearEquation(smoothenStillnessGyro, 2f);
-                        float accelMTNLNS = GetLinearEquation(smoothenStillnessAccel, 2f);
-                        alphaMTNLNS = (gyroMTNLNS * gyroMTNLNS);
-
+                        //float gyroMTNLNS = GetLinearEquation(smoothenStillnessGyro, 2f);
+                        //float accelMTNLNS = GetLinearEquation(smoothenStillnessAccel, 2f);
+                        //alphaMTNLNS = (gyroMTNLNS * gyroMTNLNS);
+                        alphaMTNLNS = smoothenStillnessAccel;
 
                         stillnessAvg /= 3; // For some reasons, file recorded stillness ~3.
 
@@ -256,8 +256,8 @@ namespace GMVD
                         //qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, thisMuY)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
                         
                         //--- GMVD with MuK
-                        qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, muK)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
-                        line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W + ", " + alpha0);
+                        qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, muK)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alphaMTNLNS);
+                        line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W + ", " + alphaMTNLNS);
                         //line.Add(stillnessGyro + ", " + stillnessAccel + ", " + alphaMTNLNS + ", " + alpha0);
                     }
                 }
