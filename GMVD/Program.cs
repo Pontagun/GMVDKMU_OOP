@@ -24,7 +24,6 @@ namespace GMVD
         public static Vector3 gyroAvg;
         public static Vector3 accelAvg;
         public static Vector3 magnetAvg;
-        public static float stillnessAvg;
 
         private static int _trigcountX = 0;
         private static int _trigcountY = 0;
