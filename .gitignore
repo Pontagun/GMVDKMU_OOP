@@ -2,3 +2,11 @@
 *.dll
 *.pdb
 *.vsidx
+.vs/GMVD/v17/.futdcache.v2
+.vs/GMVD/v17/.suo
+.vs/ProjectEvaluation/gmvd.metadata.v5.2
+.vs/ProjectEvaluation/gmvd.projects.v5.2
+GMVD/bin/Debug/net6.0/GMVD.dll
+GMVD/bin/Debug/net6.0/GMVD.pdb
+GMVD/obj/Debug/net6.0/GMVD.dll
+GMVD/obj/Debug/net6.0/GMVD.pdb
