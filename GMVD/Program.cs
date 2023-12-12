@@ -18,6 +18,7 @@ namespace GMVD
         public const float alpWeight = 0.25f;
         public const float muWeight = 0.25f;
         public const int WIN_SIZE = 8;
+        public const int WIN_SIZ_ALPHA_ACCEL = 5;
 
         // These are realtime reading associate to GMVD.
         public static Vector3 gyro0;
@@ -109,6 +110,7 @@ namespace GMVD
                         //stillness0 = Convert.ToSingle(sensorDatas.First().stillness) / 3;
 
                         (gyroAvg, accelAvg, magnetAvg, stillnessAvg) = Vector3Helper.GetAverage(sensorDatas);
+                        stillnessAvg /= 3; // For some reasons, file recorded stillness ~3.
 
                         gyroAvgList.Insert(0, gyroAvg);
                         accelAvgList.Insert(0, accelAvg);
@@ -128,7 +130,6 @@ namespace GMVD
                         //alphaMTNLNS = (gyroMTNLNS * gyroMTNLNS);
                         alphaMTNLNS = smoothenStillnessAccel;
 
-                        stillnessAvg /= 3; // For some reasons, file recorded stillness ~3.
 
                         if (sensorDatas.Count == 1)
                         {
@@ -256,7 +257,7 @@ namespace GMVD
                         //qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, thisMuY)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
                         
                         //--- GMVD with MuK
-                        qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, muK)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alphaMTNLNS);
+                        qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, muK)), (Quaternion.Slerp(qG0, qGA0, alphaMTNLNS)), alphaMTNLNS);
                         line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W + ", " + alphaMTNLNS);
                         //line.Add(stillnessGyro + ", " + stillnessAccel + ", " + alphaMTNLNS + ", " + alpha0);
                     }
@@ -289,9 +290,9 @@ namespace GMVD
             const float thMTNLNS = 0.5f;
             float valTMTNLNS = 0;
 
-            if (sensorDatas.Count > 5)
+            if (sensorDatas.Count > WIN_SIZ_ALPHA_ACCEL)
             {
-                deltaVector = sensorDatas[5] - sensorDatas[0];
+                deltaVector = sensorDatas[WIN_SIZ_ALPHA_ACCEL] - sensorDatas[0];
             }
             else {
                 deltaVector = sensorDatas[0];
