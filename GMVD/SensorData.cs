@@ -32,7 +32,6 @@ namespace GMVD
 
             this.kalman = new Quaternion(Convert.ToSingle(line[16]), Convert.ToSingle(line[17])
                 , Convert.ToSingle(line[18]), Convert.ToSingle(line[19]));
-
         }
     }
 }

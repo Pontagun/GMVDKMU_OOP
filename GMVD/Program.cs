@@ -59,7 +59,7 @@ namespace GMVD
         static List<string> line = new List<string>();
         static void Main(string[] args)
         {
-            float muK = 1.0f;
+            float KM = 1.0f;
             Vector3 bias = new Vector3(0.0f);
             Vector3 biasBuffer = new Vector3(0.0f);
             Vector3 unbiasedGyro = new Vector3(0.0f);
@@ -244,7 +244,7 @@ namespace GMVD
                         float kmmerge = (kmuang + kmmag) / 2; // mean([kmuang(i) kmmag(i)]);
                         kmmergeList.Insert(0, kmmerge);
 
-                        muK = GetKMU(kmmergeList.Take(WIN_SIZE).Average()
+                        KM = GetKMU(kmmergeList.Take(WIN_SIZE).Average()
                             , alpha0List.Take(WIN_SIZE).Average());
 
                         //--- GMV
@@ -255,10 +255,10 @@ namespace GMVD
                         //thisMuY = (muWeight * thisMuX) + (1.0f - muWeight) * thisMuY;
                         //thisMuX = Convert.ToSingle(Math.Pow(Vector3Helper.GetMuPara(magnetAvg, qGA0, M_int0), 2));
                         //qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, thisMuY)), (Quaternion.Slerp(qG0, qGA0, alpha0)), alpha0);
-                        
+
                         //--- GMVD with MuK
-                        qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, muK)), (Quaternion.Slerp(qG0, qGA0, alphaMTNLNS)), alphaMTNLNS);
-                        line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W + ", " + alphaMTNLNS);
+                        qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, KM)), (Quaternion.Slerp(qG0, qGA0, alphaMTNLNS)), alphaMTNLNS);
+                        line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W + ", " + alpha0);
                         //line.Add(stillnessGyro + ", " + stillnessAccel + ", " + alphaMTNLNS + ", " + alpha0);
                     }
                 }

@@ -9,12 +9,13 @@ namespace GMVD
 {
     public static class Vector3Helper
     {
-        public static (Vector3, Vector3, Vector3) GetAverage(List<SensorData> sensorDatas)
+        public static (Vector3, Vector3, Vector3, float) GetAverage(List<SensorData> sensorDatas)
         {
             int BUFF_SIZE = 3;
             Vector3 gyroAvg = new Vector3();
             Vector3 accelAvg = new Vector3();
             Vector3 magnetAvg = new Vector3();
+            float stillnessAvg = 0.0f;
 
             gyroAvg.X = sensorDatas.Take(BUFF_SIZE).Select(d => d.gyro.X).Average();
             gyroAvg.Y = sensorDatas.Take(BUFF_SIZE).Select(d => d.gyro.Y).Average();
@@ -28,7 +29,9 @@ namespace GMVD
             magnetAvg.Y = sensorDatas.Take(BUFF_SIZE).Select(d => d.magnet.Y).Average();
             magnetAvg.Z = sensorDatas.Take(BUFF_SIZE).Select(d => d.magnet.Z).Average();
 
-            return (gyroAvg, accelAvg, magnetAvg);
+            stillnessAvg = sensorDatas.Take(BUFF_SIZE).Select(d => d.stillness).Average();
+
+            return (gyroAvg, accelAvg, magnetAvg, stillnessAvg);
         }
 
         public static float GetKMuAngle(Vector3 magnetInert, Vector3 M_int0v)
@@ -85,6 +88,42 @@ namespace GMVD
             double angleInRad = Math.Acos(aDotBSum / abMagProd);
 
             return Convert.ToSingle(angleInRad); // return acos()
+        }
+
+        public static float GetAlphaPara(float thisAlphaY0)
+        {
+            float alpha0 = thisAlphaY0;
+            float ma = 1;
+            alpha0 = (ma * alpha0) + (1 - ma); //Linear Equation
+            alpha0 = (alpha0 + (Math.Abs(alpha0))) / 2;
+            if (alpha0 < 0.01f)
+            {
+                alpha0 = 0.5f;
+            }
+            return alpha0;
+        }
+
+        public static float GetMuPara(Vector3 magnetAvg, Quaternion qGpost, Quaternion M_int0)
+        {
+
+            Quaternion mGA4 = Quaternion.Conjugate(qGpost) * (M_int0 * qGpost);
+            Vector3 mGA3 = new Vector3(mGA4.X, mGA4.Y, mGA4.Z);
+
+            int mt = 2;
+            float normMagAvg = magnetAvg.Length();
+            float normMGA3 = mGA3.Length();
+            float cosGamma = Vector3.Dot(magnetAvg, mGA3);
+            cosGamma /= (normMagAvg * normMGA3);
+
+            cosGamma = Math.Clamp(cosGamma, -1, 1);
+
+            float gg = (float)Math.Acos((double)cosGamma);
+            float gl = -mt * gg + 1.0f; //Linear Equation
+            float temp_mu = (1.0f + gl) / 2.0f;
+
+            temp_mu = Math.Clamp(temp_mu, 0, Math.Abs(temp_mu));
+
+            return temp_mu;
         }
     }
 }
