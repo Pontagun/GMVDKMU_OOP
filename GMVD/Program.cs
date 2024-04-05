@@ -231,7 +231,7 @@ namespace GMVD
                         thisAlphaX0 = Convert.ToSingle(Math.Pow(stillnessAvg, 2.0f));
                         alpha0 = Vector3Helper.GetAlphaPara(thisAlphaY0);
 
-                        alpha0List.Insert(0, alpha0);
+                        alpha0List.Insert(0, alphaMTNLNS);
 
                         accelInert = Vector3Helper.qrotbak(qOut, accelAvg);
                         magnetInert = Vector3Helper.qrotbak(qOut, magnetAvg);
@@ -258,7 +258,7 @@ namespace GMVD
 
                         //--- GMVD with MuK
                         qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, KM)), (Quaternion.Slerp(qG0, qGA0, alphaMTNLNS)), alphaMTNLNS);
-                        line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W + ", " + alpha0);
+                        line.Add(qOut.X + ", " + qOut.Y + ", " + qOut.Z + ", " + qOut.W + ", " + alphaMTNLNS);
                         //line.Add(stillnessGyro + ", " + stillnessAccel + ", " + alphaMTNLNS + ", " + alpha0);
                     }
                 }
@@ -283,7 +283,8 @@ namespace GMVD
             return tempkm * alphamin2;
         }
 
-        public static float GetSensorDiff(List<Vector3> sensorDatas) {
+        public static float GetSensorDiff(List<Vector3> sensorDatas)
+        {
 
             Vector3 deltaVector;
             float deltaVectorAxisMax = 0.0f;
@@ -294,7 +295,8 @@ namespace GMVD
             {
                 deltaVector = sensorDatas[WIN_SIZ_ALPHA_ACCEL] - sensorDatas[0];
             }
-            else {
+            else
+            {
                 deltaVector = sensorDatas[0];
             }
 
@@ -309,12 +311,11 @@ namespace GMVD
                 valTMTNLNS = 0;
             }
 
-            // Checked True line.Add(deltaVector.X + ", " + deltaVector.Y + ", " + deltaVector.Z + ", " + deltaVectorAxisMax + ", " + valTMTNLNS);
-
             return valTMTNLNS;
         }
 
-        public static float GetGammaFilter(float stillnessSensor, float oldAlpha) {
+        public static float GetGammaFilter(float stillnessSensor, float oldAlpha)
+        {
 
             // These variables use name as Nann's paper at HCII2022.
             float alphaG = -10.0f;
@@ -325,7 +326,8 @@ namespace GMVD
             return alphaG;
         }
 
-        public static float GetLinearEquation(float value, float slope) {
+        public static float GetLinearEquation(float value, float slope)
+        {
 
             float alphaPrime = (slope * value) + (1);
             float alpha = (alphaPrime + (Math.Abs(alphaPrime))) / 2;

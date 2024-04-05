@@ -24,3 +24,7 @@ GMVD/obj/Debug/net6.0/GMVD.dll
 GMVD/obj/Debug/net6.0/GMVD.pdb
 GMVD/obj/Debug/net6.0/ref/GMVD.dll
 GMVD/obj/Debug/net6.0/refint/GMVD.dll
+
+.vs/GMVD/DesignTimeBuild/.dtbcache.v2
+
+.vs/GMVD/v17/DocumentLayout.json
