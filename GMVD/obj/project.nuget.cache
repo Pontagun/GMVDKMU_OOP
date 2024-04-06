@@ -1,8 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "NTo7IqqeftjVdNqIlxr77M1syVaD5bZKv3YqD/X0vOhNd6yFgLTeSJiAni6wdi/5ZMG/uOAXu77lF7HOZXYbLA==",
+  "dgSpecHash": "rw5HYAdJs23E8qoR2JIJJJ0NEqTmRbR2RwQptbytY7gzM3dvvfaBZIYlnGKhoHFz3qGZOWpXbFsND8KpydKATQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ponta\\source\\repos\\GMVD\\GMVD\\GMVD.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\ponta\\Documents\\GitHub\\GMVDKMU_OOP\\GMVD\\GMVD.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ponta\\.nuget\\packages\\runtime.linux-arm.runtime.native.system.io.ports\\8.0.0\\runtime.linux-arm.runtime.native.system.io.ports.8.0.0.nupkg.sha512",
+    "C:\\Users\\ponta\\.nuget\\packages\\runtime.linux-arm64.runtime.native.system.io.ports\\8.0.0\\runtime.linux-arm64.runtime.native.system.io.ports.8.0.0.nupkg.sha512",
+    "C:\\Users\\ponta\\.nuget\\packages\\runtime.linux-x64.runtime.native.system.io.ports\\8.0.0\\runtime.linux-x64.runtime.native.system.io.ports.8.0.0.nupkg.sha512",
+    "C:\\Users\\ponta\\.nuget\\packages\\runtime.native.system.io.ports\\8.0.0\\runtime.native.system.io.ports.8.0.0.nupkg.sha512",
+    "C:\\Users\\ponta\\.nuget\\packages\\runtime.osx-arm64.runtime.native.system.io.ports\\8.0.0\\runtime.osx-arm64.runtime.native.system.io.ports.8.0.0.nupkg.sha512",
+    "C:\\Users\\ponta\\.nuget\\packages\\runtime.osx-x64.runtime.native.system.io.ports\\8.0.0\\runtime.osx-x64.runtime.native.system.io.ports.8.0.0.nupkg.sha512",
+    "C:\\Users\\ponta\\.nuget\\packages\\system.io.ports\\8.0.0\\system.io.ports.8.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

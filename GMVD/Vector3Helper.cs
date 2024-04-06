@@ -38,6 +38,9 @@ namespace GMVD
         {
             // Error by angles
             float coskmuang = Vector3.Dot(magnetInert, M_int0v) / (magnetInert.Length() * M_int0v.Length());
+
+            coskmuang = Math.Clamp(coskmuang, -1, 1);
+
             float gammaKmuang = Convert.ToSingle(Math.Acos(coskmuang));
 
             float slopekmua = 3.0f;
@@ -85,7 +88,9 @@ namespace GMVD
             float aDotBSum = Vector3.Dot(a, b); // Dot as (a, b)
             float abMagProd = a.Length() * b.Length();
 
-            double angleInRad = Math.Acos(aDotBSum / abMagProd);
+            float res = Math.Clamp(aDotBSum / abMagProd, -1, 1);
+
+            double angleInRad = Math.Acos(res);
 
             return Convert.ToSingle(angleInRad); // return acos()
         }
