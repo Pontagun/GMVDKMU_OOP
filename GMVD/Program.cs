@@ -69,6 +69,14 @@ namespace GMVD
         static void Main(string[] args)
         {
             float KM = 1.0f;
+            
+            //float alphaGMVD = 1.0f;
+            //float alphaGMVDX = 1.0f;
+            //float alphaGMVDY = 1.0f;
+
+            long algoStart = 0;
+            long algoEnd = 0;
+
             Vector3 bias = new Vector3(0.0f);
             Vector3 biasBuffer = new Vector3(0.0f);
             Vector3 unbiasedGyro = new Vector3(0.0f);
@@ -100,7 +108,7 @@ namespace GMVD
             string docPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             float stillnessGyro = 1f; // Gyro𝑀𝑇𝑁𝐿𝑁𝑆
             float stillnessAccel = 1f; // Accel𝑀𝑇𝑁𝐿𝑁𝑆
-            float alphaMTNLNS = 0.0f;
+            float alphaMTNLNS = 1.0f;
             float alpha0 = 1.0f;
             float thisMuX = 1.0f;
             float thisMuY = 1.0f;
@@ -147,7 +155,7 @@ namespace GMVD
 
             _serialPort.Write(stream_timing_bytes, 0, stream_timing_bytes.Length);
             
-            //_serialPort.Write(MARGSensor.tare_bytes, 0, 3);
+            _serialPort.Write(MARGSensor.tare_bytes, 0, 3);
 
             start_stream_bytes[0] = MARGSensor.TSS_START_BYTE;
             start_stream_bytes[1] = MARGSensor.TSS_START_STREAMING;
@@ -189,6 +197,8 @@ namespace GMVD
                     //{
                     sensorDatas.Insert(0, new SensorData(Stillness0, Gyro0, Accelero0, Magneto0, IMUQuat0)); // This works like stack.
 
+                    algoStart = DateTime.Now.Ticks;
+
                     // Realtime readings.
                     //gyro0 = new Vector3(sensorDatas.First().gyro.X, sensorDatas.First().gyro.Y, sensorDatas.First().gyro.Z);
                     //accel0 = new Vector3(sensorDatas.First().accel.X, sensorDatas.First().accel.Y, sensorDatas.First().accel.Z);
@@ -196,11 +206,22 @@ namespace GMVD
                     //stillness0 = Convert.ToSingle(sensorDatas.First().stillness) / 3;
 
                     (gyroAvg, accelAvg, magnetAvg, stillnessAvg) = Vector3Helper.GetAverage(sensorDatas);
-                    stillnessAvg /= 3; // For some reasons, file recorded stillness ~3.
+                    //stillnessAvg /= 3; // For some reasons, file recorded stillness ~3.
 
                     gyroAvgList.Insert(0, gyroAvg);
                     accelAvgList.Insert(0, accelAvg);
                     magnetAvgList.Insert(0, magnetAvg);
+
+
+                    //alphaGMVDY = alpWeight * (alphaGMVDX) + (1.0f - alpWeight) * (alphaGMVDY);
+                    //alphaGMVDX = Convert.ToSingle(Math.Pow(stillnessAvg, 2));
+
+                    ////alphaGMVD = alphaGMVDY;
+                    //int ma = 1;
+                    //alphaGMVD = (ma * alphaGMVDY) + (1 - ma);
+                    //alphaGMVD = (alphaGMVD + Math.Abs(alphaGMVD)) / 2;
+
+                    //alphaGMVD = alphaGMVD < 0.01f ? 0.5f: alphaGMVD;
 
                     // Correction checked.
                     stillnessGyro = GetSensorDiff(gyroAvgList); // Gyro𝑀𝑇𝑁𝐿𝑁𝑆
@@ -214,6 +235,7 @@ namespace GMVD
                     //float gyroMTNLNS = GetLinearEquation(smoothenStillnessGyro, 2f);
                     //float accelMTNLNS = GetLinearEquation(smoothenStillnessAccel, 2f);
                     //alphaMTNLNS = (gyroMTNLNS * gyroMTNLNS);
+                    
                     alphaMTNLNS = smoothenStillnessAccel;
 
 
@@ -287,20 +309,6 @@ namespace GMVD
                     w0 = new Quaternion(unbiasedGyro, 0.0f);
 
                     // TODO : sampling from sensor instead.
-                    if (sensorDatas.Count == 1)
-                    {
-                        samplingInterval = 0.0f;
-
-
-                        Console.WriteLine("\n\n\n\t\t\tTo GET, Press [esc] button to exit this black terminal. " +
-                            "\n\n\n\t\t\tCheck the latest excel file's size and please let me know." +
-                            "\n\n\n\t\t\t\t\t\t\t\t\t Thanks");
-
-                    }
-                    else
-                    {
-                        samplingInterval = (sensorDatas[0].t - sensorDatas[1].t) * 0.001f;
-                    }
 
                     qG0 = qOut;
                     qG0 = QuaternionHelper.GetQuaternionG(qG0, w0, samplingInterval);
@@ -351,13 +359,16 @@ namespace GMVD
 
                     //--- GMVD with MuK
                     qOut = Quaternion.Slerp((Quaternion.Slerp(qG0, qGM0, KM)), (Quaternion.Slerp(qG0, qGA0, alphaMTNLNS)), alphaMTNLNS);
-                    line.Add(DateTime.Now.Millisecond + "," + Stillness0 + "," + gyroAvg.X + "," + gyroAvg.Y + "," + gyroAvg.Z
+                    algoEnd = DateTime.Now.Ticks;
+
+                    TimeSpan elapsedSpan = new TimeSpan((algoEnd - algoStart));
+                    line.Add(DateTime.Now.Millisecond + "," + Stillness0
+                        + "," + alpha0 + "," + gyroAvg.X + "," + gyroAvg.Y + "," + gyroAvg.Z
                         + "," + accelAvg.X + "," + accelAvg.Y + "," + accelAvg.Z
                         + "," + magnetAvg.X + "," + magnetAvg.Y + "," + magnetAvg.Z
-                        + "," + alpha0 + "," + IMUQuat0.X + "," + IMUQuat0.Y + "," + IMUQuat0.Z + "," + IMUQuat0.W
-                        + "," + qOut.X + "," + qOut.Y + "," + qOut.Z + "," + qOut.W + "," + alphaMTNLNS);
-                    //line.Add(stillnessGyro + ", " + stillnessAccel + ", " + alphaMTNLNS + ", " + alpha0);
-                    //}
+                        + "," + IMUQuat0.X + "," + IMUQuat0.Y + "," + IMUQuat0.Z + "," + IMUQuat0.W
+                        + "," + qOut.X + "," + qOut.Y + "," + qOut.Z + "," + qOut.W + "," + alphaMTNLNS 
+                        + "," + algoStart + "," + algoEnd + "," + (algoEnd - algoStart));
                     if(line.Count % 180000 == 0) {
                         File.AppendAllLines(Path.Combine(docPath, DateTime.Now.ToFileTime() + ".csv"), line);
                         line.Clear();

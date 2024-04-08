@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GMVD")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+15c9f8e5ee69d758a3ceb396b78387bfad218021")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+395ae3173d47257c76f0ae51fa7d2af75d335c19")]
 [assembly: System.Reflection.AssemblyProductAttribute("GMVD")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GMVD")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
